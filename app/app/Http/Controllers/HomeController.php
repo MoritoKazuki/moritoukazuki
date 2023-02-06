@@ -25,4 +25,23 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function spendDetail(int $id) {
+        
+
+        // $spending = new Spending;
+        // $spend_with_type = 
+
+        $spending ->with('type') ->where('id',$spending)
+                                 ->first();
+                                     
+        // if(is_null($spend_with_type)) {
+        // abort(404);
+        // }
+        // // dd($spend_with_type->types);
+
+        return view('spend',
+        ['spends' => $spending,
+        ]);
+    }
 }

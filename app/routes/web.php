@@ -11,22 +11,26 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 
+// Route::get('', 'AccountController@index')->name('account.index');
+
+Route::get('/post/{id}/detail',['HomeController@index', 'postDetail'])->name('post.detail');
+
+// 一般ユーザー
+Route::group(['middleware' => ['auth', 'can:user-higher']], function () {
+    //ここにルートを記述
+  });
+
+// 管理者ユーザー
 Route::group(['middleware' => ['auth', 'can:admin_only']], function () {
     Route::get('account', 'AccountController@index')->name('account.index');
 });
-
-// Auth::routes();
-
-// Route::get('/home', 'HomeController@index')->name('home');
-
-// Auth::routes();
-
-// Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
+    //ここにルートを記述
+  });
