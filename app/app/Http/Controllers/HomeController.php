@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use App\Http\Controllers\Controller;
+// use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\Auth;
+
+use App\User;
 
 class HomeController extends Controller
 {
@@ -26,22 +31,11 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function spendDetail(int $id) {
-        
+    public function accountData(int $id) {
 
-        // $spending = new Spending;
-        // $spend_with_type = 
+        $id = Auth::id();
+        $account = DB::table('users')->find($id);
 
-        $spending ->with('type') ->where('id',$spending)
-                                 ->first();
-                                     
-        // if(is_null($spend_with_type)) {
-        // abort(404);
-        // }
-        // // dd($spend_with_type->types);
-
-        return view('spend',
-        ['spends' => $spending,
-        ]);
+        return view('account', ['$account' => $account]);
     }
 }
