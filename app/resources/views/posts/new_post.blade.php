@@ -6,7 +6,8 @@
             <div class="card">
             
                 <div class="card-header">
-                    <h4 class='text-center'>支出</h1>
+                    <h4 class='text-center'>新規投稿
+                    </h1>
                 </div>
                 <div class="card-body">
                     <div class="card-body">
@@ -21,30 +22,29 @@
                             </div>
                             @endif
                         </div>
-                        <form action="" method="post">
+                        <form action="{{ route('photos.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <label for='amount'>タイトル</label>
-                                <input type='text' class='form-control' name='amount' value=""/>
-                            <label for='amount'>ペットのお名前</label>
-                                <input type='text' class='form-control' name='amount' value=""/>
+                            <label for='title'>タイトル</label>
+                                <input type='text' class='form-control' name='title' value=""/>
+                            <label for='pet'>ペットのお名前</label>
+                                <input type='text' class='form-control' name='pet' value=""/>
                             <label for='date' class='mt-2'>日付</label>
                                 <input type='date' class='form-control' name='date' id='date' value=""/>
-                            <label for='type' class='mt-2'>種類</label>
-                            <select name='type_id' class='form-control'>
-                                <option value="" hidden>種類</option>
-                             
-                                <option value=""></option>
-                                
+                            <label for='category' class='mt-2'>種類</label>
+                            <select name='category_id' class='form-control'>
+                                <option value="" hidden>例：猫</option>
+                                @foreach($categories as $category)
+                                <option value="{{ $category['id'] }}">{{ $category['category'] }}</option>
+                                @endforeach
                             </select>
-                            <a href="{{}}">種類追加</a>
                             </br>
                             <p>画像追加
                             </br>
                             <input type="file" name="image">
                             </p>
                             </br>
-                            <label for='comment' class='mt-2'>コメント</label>
-                                <textarea class='form-control' name='comment'></textarea>
+                            <label for='episode' class='mt-2'>コメント</label>
+                                <textarea class='form-control' name='episode'></textarea>
                             <div class='row justify-content-center'>
                                 <button type='submit' class='btn btn-primary w-25 mt-3'>登録</button>
                             </div> 

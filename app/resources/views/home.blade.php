@@ -17,7 +17,7 @@
                     </a>
                 </div>
                 <div class="col-3">
-                  <a href="{{ route('account.data') }}">
+                  <a href="{{ route('my_page.data') }}">
                    <button class='btn btn-danger'>マイページ</button>
                   </a>
                 </div>

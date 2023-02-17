@@ -48,4 +48,8 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPassword($token)); //****変更****
     }
+
+    public function Post() {
+        return $this->hasMany('App\Post');
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\DisplayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +17,33 @@ use App\Http\Controllers\PhotoController;
 //     return view('welcome');
 // });
 Auth::routes();
+// パスリセ
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset/{token}', 'Auth\ResetPasswordController@reset');
 
 Route::resource('photos', 'PhotoController');
 
 Route::get('/', 'PhotoController@index')->name('home');
 // マイページ
-Route::get('/account','PhotoController@accountData')->name('account.data');
-// 新規投稿
-// Route::get('/new_post','PhotoController@create')->name('new.post');
-// Route::post('/new_post','PhotoController@store');
+Route::get('/my_page','PhotoController@my_pageData')->name('my_page.data');
+// 投稿一覧
+Route::get('/my_page/post_list','PhotoController@postList')->name('post.list');
+// アカウント情報
+Route::get('/my_page/account','DisplayController@accountData')->name('account.data');
+// アカウント編集
+Route::get('/account/account_edit','DisplayController@accountEditForm')->name('account.edit');
+Route::post('/account/account_edit','DisplayController@accountEdit')->name('edit.post');
+
+// Route::get('/edit_form/{spending}',[RegistrationController::class, 'editSpendForm'])->name('edit.spend');
+// Route::post('/edit_form/{spending}',[RegistrationController::class, 'spendEdit'])->name('edit.post');
+
+// 投稿削除
+
+// アカウント情報
+
+
 
 
 
@@ -43,8 +62,6 @@ Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
     //ここにルートを記述
   });
 
-  //パスワードリセット
-Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

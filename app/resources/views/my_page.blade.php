@@ -10,7 +10,7 @@
                     </a>
                 </div>
                 <div class="col-3">
-                    <a href="">
+                    <a href="{{ route('account.data') }}">
                     <button class='btn btn-danger'>アカウント情報</button>
                     </a>
                 </div>
@@ -20,7 +20,7 @@
                     </a>
                 </div>
                 <div class="col-3">
-                    <a href="">
+                    <a href="{{ route('post.list') }}">
                     <button class='btn btn-danger'>投稿一覧</button>
                     </a>
                 </div>
