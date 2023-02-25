@@ -12,7 +12,7 @@
                 <div class="card-body">
                     <div class="card-body">
                         
-                        <form action="{{ route('photos.update',['photo'=>$post->id]) }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('posts.update',['post'=>$post->id]) }}" method="post" enctype="multipart/form-data">
                             @method('patch')
                             @csrf
                             <label for='title'>タイトル</label>

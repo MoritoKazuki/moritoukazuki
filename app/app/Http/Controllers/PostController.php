@@ -11,9 +11,11 @@ use App\Category;
 use App\Post;
 use App\User;
 use App\Comment;
+use App\Like;
 
-class PhotoController extends Controller
+class PostController extends Controller
 {
+    
     /**
      * Create a new controller instance.
      *
@@ -27,22 +29,43 @@ class PhotoController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $items = Post::all();
+        
+        $items = Post::with('user')->get();
 
+        $like_model = new Like;
+        
+       
 
         return view('home',[
             'items' => $items,
+            'like_model'=>$like_model,
         ]);
-
-        
     }
 
-   
+    public function ajaxlike(Request $request)
+    {
+        $id = Auth::user()->id;
+        $post_id = $request->post_id;
+        $like = new Like;
+        
+
+        // 空でない（既にいいねしている）なら
+        if ($like->like_exist($id, $post_id)) {
+            //likesテーブルのレコードを削除
+            $like = Like::where('post_id', $post_id)->where('user_id', $id)->delete();
+        } else {
+            //空（まだ「いいね」していない）ならlikesテーブルに新しいレコードを作成する
+            $like = new Like;
+            $like->post_id = $request->post_id;
+            $like->user_id = Auth::user()->id;
+            $like->save();
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -84,11 +107,10 @@ class PhotoController extends Controller
         $post->episode = $request->episode;
 
 
-        Auth::user()->post()->save($post);
+        Auth::user()->posts()->save($post);
         return redirect('/my_page');
     }
 
-   
 
     /**
      * Display the specified resource.
@@ -108,6 +130,7 @@ class PhotoController extends Controller
 
         return view('posts/post_detail',compact('item'),['items' => $item,'comments' => $comments,]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -149,10 +172,11 @@ class PhotoController extends Controller
         $record->image = $image;
         $record->episode = $request->episode;
 
-        Auth::user()->post()->save($record);
+        Auth::user()->posts()->save($record);
 
         return redirect('/my_page');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -169,6 +193,7 @@ class PhotoController extends Controller
 
     public function search(Request $request){
         $search = $request->input('search');
+        
             // クエリビルダ
             $query = Post::query();
                 // 全角スペースを半角に変換
@@ -184,15 +209,18 @@ class PhotoController extends Controller
                 }
     
                 $items=$query->paginate(5);
+                $like_model = new Like;
+                
     
                 return view('home',[
                     'items' => $items,
+                    'like_model' => $like_model,
                 ]);
        }
     
-        public function my_pageData($id) {
+        public function my_pageData() {
             
-            $user = User::all()->find($id);
+            $user = Auth::user();
             
     
             return view('my_page', [
@@ -209,4 +237,15 @@ class PhotoController extends Controller
                 'items' => $items,
             ]);
         }
+
+        public function otherData($id) {
+            
+            $user = User::find($id);
+      
+            return view('my_page', [
+                'user' => $user,
+            ]);
+        }
+      
 }
+

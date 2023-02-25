@@ -44,6 +44,10 @@
   box-sizing: border-box;
 }
 
+.loved i {
+  color: red !important;
+}
+
 html {
   font-family: sans-serif;
   line-height: 1.15;
@@ -10930,5 +10934,12 @@ a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6;
   }
+}
+p.js-like-toggle{
+  color: gray;
+}
+
+p.js-like-toggle.loved{
+  color: red;
 }
 

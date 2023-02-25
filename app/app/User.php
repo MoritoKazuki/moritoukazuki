@@ -49,7 +49,15 @@ class User extends Authenticatable
         $this->notify(new ResetPassword($token)); //****変更****
     }
 
-    public function Post() {
+    public function posts() {
         return $this->hasMany('App\Post');
+    }
+
+    public function comments() {
+        return $this->hasMany('App\Comment');
+    }
+
+    public function likes() {
+        return $this->hasMany('App\like');
     }
 }

@@ -22,7 +22,7 @@
                             </div>
                             @endif
                         </div>
-                        <form action="{{ route('photos.store') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('posts.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <label for='title'>タイトル</label>
                                 <input type='text' class='form-control' name='title' value=""/>

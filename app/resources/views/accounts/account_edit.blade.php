@@ -6,23 +6,28 @@
             <div class="card">
             
                 <div class="card-header">
-                    <h4 class='text-center'>収入</h1>
+                    <h4 class='text-center'>アカウント編集</h1>
                 </div>
                 <div class="card-body">
                     <div class="card-body">
                         
-                        <form action="" method="post">
+                        <form action="{{ route('edit.post') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <label for='amount'>金額</label>
-                                <input type='text' class='form-control' name='amount' value=""/>
-                            <label for='date' class='mt-2'>日付</label>
-                                <input type='date' class='form-control' name='date' id='date' value=""/>
-                            <label for='type' class='mt-2'>カテゴリ</label>
+                            <label for=''>ユーザー名</label>
+                                <input type='text' class='form-control' name='name' value="{{ $user['name']}}"/>
+                            
+                                <input type="file" name="image">
+                            <label for=''>一言コメント</label>
+                                <input type='text' class='form-control' name='profile' value="{{ $user['profile']}}"/>
+
+                            <!-- <label for='date' class='mt-2'>日付</label>
+                                <input type='date' class='form-control' name='date' id='date' value=""/> -->
+                            <!-- <label for='type' class='mt-2'>カテゴリ</label>
                             
                             <a href="">カテゴリ追加</a>
                             </br>
                             <label for='comment' class='mt-2'>コメント</label>
-                                <textarea class='form-control' name='comment'></textarea>
+                                <textarea class='form-control' name='comment'></textarea> -->
                             <div class='row justify-content-center'>
                                 <button type='submit' class='btn btn-primary w-25 mt-3'>登録</button>
                             </div> 
