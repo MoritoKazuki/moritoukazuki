@@ -41,11 +41,11 @@ Route::get('/search','PostController@search')->name('search');
 Route::get('/my_page','PostController@my_pageData')->name('my_page.data');
 Route::get('/other/{id}','PostController@otherData')->name('other.data');
 
-
 // 一般
 Route::group(['middleware' => 'can:user-higher'], function () {
     // 投稿一覧
     Route::get('/post_list','PostController@postList')->name('post.list');
+    Route::get('/post_list/{id}','PostController@users_postList')->name('users_post.list');
     // アカウント情報
     Route::get('/account_info','DisplayController@accountData')->name('account.data');
     // アカウント編集

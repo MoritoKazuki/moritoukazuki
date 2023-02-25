@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateData;
+use App\Http\Requests\updatepost;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -88,7 +90,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateData $request)
     {
         
         $post = new Post;
@@ -96,7 +98,7 @@ class PostController extends Controller
         // 画像フォームでリクエストした画像を取得
         $image = $request->file('image')->getClientOriginalName();
         $request->file('image')->storeAs('',$image,'public');
-        // dd($request->file('image'));
+        
            // storage > public > img配下に画像が保存される
         // $path = $img->store('img','public');
         $post->title = $request->title;
@@ -156,20 +158,25 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(updatepost $request, $id)
+    // CreateData
     {
         $post = new Post;
         $record = $post->find($id);
         // dd($request);
         
-        $image = $request->file('image')->getClientOriginalName();
-        $request->file('image')->storeAs('',$image,'public');
+        if(null !==$request->file('image')){
+            $image = $request->file('image')->getClientOriginalName();
+            $request->file('image')->storeAs('',$image,'public');
+        }
 
         $record->title = $request->title;
         $record->date = $request->date;
         $record->pet = $request->pet;
         $record->category_id = $request->category_id;
-        $record->image = $image;
+        if(null !==$request->file('image')){
+            $record->image = $image;
+        }
         $record->episode = $request->episode;
 
         Auth::user()->posts()->save($record);
@@ -191,32 +198,37 @@ class PostController extends Controller
         return redirect('/my_page');
     }
 
+    // 検索
     public function search(Request $request){
         $search = $request->input('search');
+
+        // 全角スペースを半角に変換
+        $spaceConversion = mb_convert_kana($search, 's');
         
-            // クエリビルダ
-            $query = Post::query();
-                // 全角スペースを半角に変換
-                $spaceConversion = mb_convert_kana($search, 's');
+        // 単語を半角スペースで区切り、配列にする（例："山田 翔" → ["山田", "翔"]）
+        $wordArraySearched = preg_split('/[\s,]+/', $spaceConversion, -1, PREG_SPLIT_NO_EMPTY);
+
+        // 単語をループで回し、ユーザーネームと部分一致するものがあれば、$queryとして保持される
+        $keyword = [];
+        $query = Post::query()->whereHas('category', function ($query) use ($wordArraySearched) {
+            $query->whereIn('category',$wordArraySearched)
+                  ->orWhereIn('posts.title',$wordArraySearched);
+            
+        })->get();
+
+
+      
+
     
-                // 単語を半角スペースで区切り、配列にする（例："山田 翔" → ["山田", "翔"]）
-                $wordArraySearched = preg_split('/[\s,]+/', $spaceConversion, -1, PREG_SPLIT_NO_EMPTY);
-    
-    
-                // 単語をループで回し、ユーザーネームと部分一致するものがあれば、$queryとして保持される
-                foreach($wordArraySearched as $value) {
-                    $query->orWhere('title', 'like', '%'.$value.'%');
-                }
-    
-                $items=$query->paginate(5);
-                $like_model = new Like;
-                
-    
-                return view('home',[
-                    'items' => $items,
-                    'like_model' => $like_model,
-                ]);
-       }
+        $items = $query;
+        $like_model = new Like;
+        
+
+        return view('home',[
+                'items' => $items,
+                'like_model' => $like_model,
+            ]);
+    }
     
         public function my_pageData() {
             
@@ -245,7 +257,18 @@ class PostController extends Controller
             return view('my_page', [
                 'user' => $user,
             ]);
+
         }
       
+        public function users_postList($id) {
+            
+            $items = Post::where('user_id',$id)->get();
+            // return view('item.index', compact('items'));
+    
+            // dd($items);
+            return view('posts/post_list',[
+                'items' => $items,
+            ]);
+        }
 }
 

@@ -10,17 +10,26 @@
                     </h1>
                 </div>
                 <div class="card-body">
-                    <div class="card-body">
-                        
+                <div class = 'panel-body'>
+                            @if($errors->any())
+                            <div class='alert alert-danger'>
+                                <ul>
+                                    @foreach($errors->all() as $message)
+                                    <li>{{ $message }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+                        </div>
                         <form action="{{ route('posts.update',['post'=>$post->id]) }}" method="post" enctype="multipart/form-data">
                             @method('patch')
                             @csrf
                             <label for='title'>タイトル</label>
-                                <input type='text' class='form-control' name='title' value="{{ $post['title']}}"/>
+                                <input type='text' class='form-control' name='title' value="{{ old('title',$post['title'])}}"/>
                             <label for='pet'>ペットのお名前</label>
-                                <input type='text' class='form-control' name='pet' value="{{ $post['pet']}}"/>
+                                <input type='text' class='form-control' name='pet' value="{{ old('pet',$post['pet'])}}"/>
                             <label for='date' class='mt-2'>日付</label>
-                                <input type='date' class='form-control' name='date' id='date' value="{{ $post['date']}}"/>
+                                <input type='date' class='form-control' name='date' id='date' value="{{ old('date',$post['date'])}}"/>
                             <label for='category' class='mt-2'>種類</label>
                             <select name='category_id' class='form-control'>
                                 @foreach($categories as $category)
@@ -35,11 +44,12 @@
                             <p>画像
                             </br>
                             <img src="{{ asset('storage/'.$post['image']) }}" width='150' height='200'>
+                            <p>変更する場合は画像ファイルを選択して下さい</p>
                             <input type="file" name="image" value="{{ $post['image']}}">
                             </p>
                             </br>
                             <label for='episode' class='mt-2'>コメント</label>
-                                <textarea class='form-control' name='episode'>{{ $post['episode']}}</textarea>
+                                <textarea class='form-control' name='episode'>{{ old('episode',$post['episode'])}}</textarea>
                             <div class='row justify-content-center'>
                                 <button type='submit' class='btn btn-primary w-25 mt-3'>登録</button>
                             </div> 

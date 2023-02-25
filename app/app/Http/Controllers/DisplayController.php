@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\accounts;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,17 +35,28 @@ class DisplayController extends Controller
     }
 
     public function accountEdit(Request $request) {
+        
+        $validated=$request->validate([
+            'name' => 'required'
+        ]);
+
+
         $user = new User;
 
         $id = Auth::id();
         $record = $user->find($id);
 
+        if(isset($request->image)){
         $image = $request->file('image')->getClientOriginalName();
         $request->file('image')->storeAs('',$image,'public');
 
+        $record->image = $image;
+        }
+
+
         $record->name = $request->name;
         $record->profile = $request->profile;
-        $record->image = $image;
+        
 
         $record->save();
 

@@ -18,7 +18,7 @@
                                         <th scope='col'>年月日</th>
                                         <th scope='col'>ペットの名前</th>
                                         <th scope='col'>種類</th>
-                                        <th scope='col'>コメント</th>
+                                        <th scope='col'>エピソード</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -83,7 +83,6 @@
                   </dev>
                 @endif
                 <dev class='d-flex justify-content-center mt-2'>
-                
                 <button class='btn btn-secondary' onclick="history.back()">戻る</button>
                 </dev>
                 </div>

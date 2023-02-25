@@ -60,4 +60,10 @@ class User extends Authenticatable
     public function likes() {
         return $this->hasMany('App\like');
     }
+
+    
+    public function userCategory() {
+        return $this->belongsToMany(Category::class, 'posts', 'user_id', 'category_id');
+    }
+
 }
