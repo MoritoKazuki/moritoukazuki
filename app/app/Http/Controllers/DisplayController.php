@@ -71,7 +71,13 @@ class DisplayController extends Controller
     }
     
     public function like($id) {
-        $items = Post::join('likes','posts.id','post_id')->where('likes.user_id',$id)->get();
+        $items = Post::select('title','posts.image','pet','posts.user_id as pu_id','post_id','likes.user_id as lu_id','name','category','posts.id as p_id')
+        ->join('likes','posts.id','=','likes.post_id')
+        ->join('users','posts.user_id','=','users.id')
+        ->join('categories','posts.category_id','=','categories.id')
+        ->where('likes.user_id',$id)
+        ->get();
+        
 
         
         return view('like',compact('items'));

@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>ペット暮らしnet</title>
+    <title>laravel</title>
     <!-- {{ config('app.name', 'Laravel') }} -->
 
     <!-- Scripts -->
@@ -26,10 +26,10 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="background:#DDFFFF;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                ペット暮らしnet
+                <img src="{{ asset('logo.png') }}">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -85,6 +85,11 @@
                                         管理者ページ
                                     </a>
                                     @endif
+                                    @can ('user-higher')
+                                        <a class="dropdown-item" href="{{ route('my_page.data') }}">
+                                          マイページ
+                                        </a>
+                                    @endcan
                                 </div>
                             </li>
                         @endguest

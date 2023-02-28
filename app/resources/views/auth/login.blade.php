@@ -5,7 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+                <div class="card-header d-flex justify-content-around align-items-center" style="background:#BBFFFF;">
+                    <p class="my-2">{{ __('Login') }}</p>
+                    <p class="my-2"><img src="{{ asset('logogo.png') }}"></p>
+                </div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">

@@ -212,7 +212,7 @@ class PostController extends Controller
         $keyword = [];
         $query = Post::query()->whereHas('category', function ($query) use ($wordArraySearched) {
             $query->whereIn('category',$wordArraySearched)
-                  ->orWhereIn('posts.title',$wordArraySearched);
+                  ->orWhereIn('posts.pet',$wordArraySearched);
             
         })->get();
 

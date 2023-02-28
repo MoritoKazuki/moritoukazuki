@@ -3,56 +3,53 @@
 @section('content')
     <main class="py-4">
         <div class="container">
-            <div class="card">
+            <div class="card rounded">
                 @if($user['image']!==null)
-                <img src="{{ asset('storage/'.$user['image']) }}" style="max-width: 1400px; max-height: 500px;">
+                <img src="{{ asset('storage/'.$user['image']) }}" style="width: 100%; height: 500px;  object-fit:cover; opacity: 0.7;">
                 @else
-                <img src="{{ asset('noimage.png') }}" style="max-width: 1400px; max-height: 500px;">
+                <img src="{{ asset('noimage.png') }}" style="width: 100%; height: 500px;  object-fit:cover; opacity: 0.7;">
                 @endif
-              <div class="card-img-overlay text-white">
-                <p class="bg-dark">
-                    <th scope='col'>ユーザー名</th><th scope='col'>{{$user['name']}}</th>
-                </p>
-                <p class="bg-dark">
-                    <th scope='col'>一言コメント</th><th scope='col'>{{$user['profile']}}</th>
-                </p>
+              <div class="card-img-overlay my-5">
+                <div class="my-5 text-center" style="height: 80px; background:#DDDDDD;">
+                    <p style="background:#CCCCCC;">ユーザー名</p>
+                    <p>{{$user['name']}}</p>
+                </div>
+                <div class="my-5 text-center" style="height: 80px; background:#DDDDDD;">
+                    <p style="background:#CCCCCC;">一言コメント</p>
+                    <p>{{$user['profile']}}</p>
+                </div>
               </div>
+
+
+              
             </div>
             
-            <div class="row">
-            @if($user['id'] == Auth::id())
-                <div class="col-3">
+            <div class="border border-success" style="background:#EEEEEE; height:150px; margin-top: 30; padding-top: 50;">
+             <div class="d-flex justify-content-around w-100">
+                @if($user['id'] == Auth::id())
                     <a href="{{ route('posts.create') }}">
-                    <button class='btn btn-danger w-50'>新規登録</button>
+                        <button type="button" class="btn btn-outline-success">新規登録</button>
                     </a>
-                </div>
-                <div class="col-3">
                     <a href="{{ route('account.data') }}">
-                    <button class='btn btn-danger w-50'>アカウント情報</button>
+                        <button type="button" class="btn btn-outline-success">アカウント情報</button>
                     </a>
-                </div>
-                <div class="col-3">
                     <a href="{{ route('like', $user->id) }}">
-                    <button class='btn btn-danger w-50'>いいね欄</button>
+                        <button type="button" class="btn btn-outline-success">いいね欄</button>
                     </a>
-                </div>
-                <div class="col-3">
                     <a href="{{ route('post.list') }}">
-                    <button class='btn btn-danger w-50'>投稿一覧</button>
+                        <button type="button" class="btn btn-outline-success">投稿一覧</button>
                     </a>
-                </div>
                 @else
-                <div class="col-3">
                     <a href="{{ route('users_post.list',$user['id']) }}">
-                    <button class='btn btn-danger w-50'>投稿一覧</button>
+                        <button type="button" class="btn btn-outline-success">投稿一覧</button>
                     </a>
-                </div>
                 @endif
+                  <button class='btn btn-secondary' onclick="history.back()">戻る</button>
+             </div>
             </div>
-            <dev class='d-flex justify-content-center mt-2'>
-                <button class='btn btn-secondary' onclick="history.back()">戻る</button>
-            </dev>
         </div>
         </main>
 </div>
 @endsection
+<style>
+</style>

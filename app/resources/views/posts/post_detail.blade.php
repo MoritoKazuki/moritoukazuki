@@ -1,55 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
-<main class="py-4">
-            <div class="row justify-content-around">
-                <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <div class='text-center'>詳細</div>
+
+<main class="container">
+    <div class="card">
+        <div class="card-header border border-5" style="background:#EEFFFF; letter-spacing: 10px;">
+            <div class='text-center font-weight-bold'>投稿詳細</div>
+        </div>
+        <div class="card-body border border-5" style="background:#EEEEEE;">
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="container w-50">
+                        <p class="font-weight-bold rounded bg-info w-25 text-center">画像</p>
+                        <img src="{{ asset('storage/'.$items['image']) }}" class="card-img-top" style="height:250px; width:250px; object-fit:cover;"></th>
                     </div>
-                    <div class="card-body">
-                        <div class="card-body">
-                            <table class='table'>
-                                <thead>
-                                    <tr>
-                                        <th scope='col'>画像</th>
-                                        <th scope='col'>タイトル</th>
-                                        <th scope='col'>年月日</th>
-                                        <th scope='col'>ペットの名前</th>
-                                        <th scope='col'>種類</th>
-                                        <th scope='col'>エピソード</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- ここに支出を表示する -->
-                                    <tr>
-                                        <th scope='col'><img src="{{ asset('storage/'.$items['image']) }}" width='150' height='200'></th>
-                                        <th scope='col'>{{$items->title}}</th>
-                                        <th scope='col'>{{$items->date}}</th>
-                                        <th scope='col'>{{$items->pet}}</th>
-                                        <th scope='col'>{{$items->category->category}}</th>
-                                        <th scope='col'>{{$items->episode}}</th>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class='container'>
-                             <p>コメント一覧</p>
-                             @foreach($comments as $comment)
-                                @if($comment!==null)
-                                <div class="d-flex justify-content-between">
-                                    <p>{{$comment['text']}}</p>
-                                    @if($comment['user_id'] == Auth::id())
-                                    <form action="{{route('comment.delete',['comment_id' => $comment['id']])}}" method="post" class="float-right">
-                                        @csrf
-                                        @method('delete')
-                                        <input type="submit" value="削除" class="btn btn-danger" onclick='return confirm("削除しますか？");'>
-                                    </form></br>
-                                    @endif
-                                </div>
-                                @endif
-                             @endforeach
-                            </div>
+                    <div class="container border border-5" style="background:white;">
+                        <table style="width: 100%;">
+                            <tr style="height: 50px;">
+                                <th style="width: 25%;">タイトル</th><td style="width: 75%;">{{$items->title}}</td>
+                            </tr>
+                            <tr style="height: 50px;">
+                                <th>年月日</th><td>{{$items->date}}</td>
+                            </tr>
+                            <tr style="height: 50px;">
+                                <th>ペットのお名前</th><td>{{$items->pet}}</td>
+                            </tr>
+                            <tr style="height: 50px;">
+                                <th>種類</th><td>{{$items->category->category}}</td>
+                            </tr>
+                            <tr style="height: 50px;">
+                                <th>エピソード</th><td>{{$items->episode}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
 
                             <div class="card-body line-height">
                             <a class="light-color post-time no-text-decoration" href="/articles/"></a>
@@ -59,34 +44,47 @@
                             {{csrf_field()}}
                             <input value="" type="hidden" name="article_id" />
                             <input value="{{ Auth::id() }}" type="hidden" name="user_id" />
-                            <input class="form-control comment-input border-0" placeholder="コメント ..." autocomplete="off" type="text" name="comment" />
+                            <input class="form-control comment-input border-2" placeholder="コメント ..." autocomplete="off" type="text" name="comment" />
                             <button class='btn btn-secondary'>コメントする</button>
                            </form>
                          </div>
                        </div>
 
-                        </div>
+                    <div class='card'>
+                    <p class="border">コメント一覧</p>
+                    @foreach($comments as $comment)
+                    @if($comment!==null)
+                    <div class="d-flex justify-content-between">
+                        <p class="my-2">{{$comment['text']}}</p>
+                        @if($comment['user_id'] == Auth::id())
+                        <form action="{{route('comment.delete',['comment_id' => $comment['id']])}}" method="post" class="float-right">
+                            @csrf
+                            @method('delete')
+                            <input type="submit" value="取消" class="btn btn-outline-danger" style="padding: 2%; margin-top: 5px;" onclick='return confirm("削除しますか？");'>
+                        </form></br>
+                        @endif
                     </div>
+                    @endif
+                    @endforeach
                 </div>
-                <div class = "d-flex justify-content-center">
-                @if(Auth::user()->id == $items->user_id)
-                 {{-- 削除ボタン --}}
-                  <form action="{{route('posts.destroy', $items->id)}}" method="post" class="float-right">
-                  @csrf
-                  @method('delete')
-                  <input type="submit" value="削除" class="btn btn-danger" onclick='return confirm("削除しますか？");'>
-                  </form>
-                  <dev class='d-flex justify-content-center mr-5 mt-2'>
-                  <a href="{{ route('posts.edit',['post'=>$items->id]) }}">
-                     <button class='btn btn-secondary'>編集</button>
-                  </a>
-                  </dev>
-                @endif
-                <dev class='d-flex justify-content-center mt-2'>
-                <button class='btn btn-secondary' onclick="history.back()">戻る</button>
-                </dev>
+
+                        </div>
+                    
+                
+
+                <div class = "d-flex justify-content-around">
+                    @if(Auth::user()->id == $items->user_id)
+                    {{-- 削除ボタン --}}
+                    <form action="{{route('posts.destroy', $items->id)}}" method="post" class="float-right">
+                        @csrf
+                        @method('delete')
+                        <input type="submit" value="削除" class="btn btn-outline-danger" onclick='return confirm("削除しますか？");'>
+                    </form>
+                        <a href="{{ route('posts.edit',['post'=>$items->id]) }}">
+                        <button class='btn text-white' style="background:#9999CC;">編集する</button>
+                        </a>
+                    @endif
                 </div>
-              </div>
-            </div>
+                </div>
         </main>
 @endsection

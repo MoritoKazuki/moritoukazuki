@@ -1,56 +1,63 @@
 @extends('layouts.app')
 
 @section('content')
-    <main class="py-4 ">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <h3 class="text-info">
-                        <i class="fas fa-cat"></i>
-                        ようこそペット暮らしnetへ
-                        <i class="fas fa-cat"></i>
-                    </h3>
-                    <div>ここでは、みんなでペットの画像などを共有することで、癒されるのを目的としたサイトです。
-                    <p>自分で飼っているペットをアップするも良し、にやにやと眺めるも良し。きっとあなたの疲れを癒してくれるでしょう。</p>
-                    <p>家庭の事情やアレルギーなどでペットを飼えない人にも動物を近くに感じていただければと思います。</p>
-                    <p>ぜひご投稿ください。</p>
-                    </div>
-                </div>
-                <div class="col-2">
-                @can ('user-higher')
-                    <div class='text-right'>
-                     <a href="{{ route('my_page.data') }}">
-                         <button type="button" class="btn btn-info btn-lg" ><i class="fas fa-user-circle"></i>マイページ</button>
-                     </a>
-                    </div>
-                    @endcan
-                    <form method="GET" action="{{ route('search') }}">
-                        <input type="search" placeholder="タイトルを入力" name="search" value="@if (isset($search)) {{ $search }} @endif">
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button type="submit">検索</button>
-                                <button>
-                                <a href="{{ route('home') }}" class="text-white">クリア</a>
-                                </button>
-                            </div>
-                    </form>
-                </div>
+    <main class="container">
+        <div class="border border-secondary" style="background:#DDFFFF; padding: 10px;">
+            <h3 class="text-info">
+                <i class="fas fa-cat"></i>
+                    ようこそペット暮らしnetへ
+                <i class="fas fa-cat"></i>
+            </h3>
+            <div class="text-left">ここでは、みんなでペットの画像などを共有することで、癒されるのを目的としたサイトです。
+                <p>自分で飼っているペットをアップするも良し、にやにやと眺めるも良し。きっとあなたの疲れを癒してくれるでしょう。</p>
+                <p>家庭の事情やアレルギーなどでペットを飼えない人にも動物を近くに感じていただければと思います。</p>
+                <p>ぜひご投稿ください。</p>
             </div>
         </div>
+                    
+        <form method="GET" action="{{ route('search') }}">
+            <div class="d-flex justify-content-end my-4">
+                <input class='mx-3 col-md-3' type="search" placeholder="種類、ペットのお名前を検索" name="search" value="@if (isset($search)) {{ $search }} @endif">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-success">検索</button>
+                    <a href="{{ route('home') }}" class="btn btn-secondary mx-3">クリア</a>
+                </div>
+            </div>
+        </form>
   
-        <div class="row justify-content-around center">
+        <div class="card" style="background:#EEEEEE;">
+        <h1 class="text-center text-info" style="background:#DDFFFF; padding:5px;">みんなの投稿</h1>
+        <div class="row justify-content-around center mt-3">
             @foreach($items as $item)
-                <div class="card mb-3" style="width: 20rem;">
-                    <img src="{{ asset('storage/'.$item['image']) }}" class="card-img-top" height='200'>
+                <div class="card mb-3">
+                    <img src="{{ asset('storage/'.$item['image']) }}" class="card-img-top" style="height:200px; width:300px; object-fit:cover;">
                 <div class="card-body">
-                    <h5 class="card-title">タイトル</h5>
-                    <p class="card-text">{{$item->title}}</p>
-                    <h5 class="card-title">お名前</h5>
-                    <p class="card-text">{{$item->pet}}</p>
-                    <h5 class="card-title">投稿者</h5>
-                    <p class="card-text">{{$item->user['name']}}</p>
-                    <h5 class="card-title">種類</h5>
-                    <p class="card-text">{{$item->category->category}}</p>
-                    <p><a href="{{ route('posts.show',['post'=>$item->id]) }}">詳細</a></p>
+                    <div class="card">
+                        <div class="card-header font-weight-bold">タイトル</div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">{{$item->title}}</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-header font-weight-bold">お名前</div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">{{$item->pet}}</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-header font-weight-bold">投稿者</div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">{{$item->user['name']}}</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-header font-weight-bold">種類</div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">{{$item->category->category}}</li>
+                        </ul>
+                    </div>
+                    <div class="mt-2 text-right"><a href="{{ route('posts.show',['post'=>$item->id]) }}">詳細>></a></div>
+                
                     <p><a href="{{ route('other.data',$item->user->id) }}"><i class="fas fa-user-circle"></i>投稿者のマイページに進む</a></p>
                     @if($like_model->like_exist(Auth::user()->id,$item->id))
                      <p class="favorite-marke">
@@ -63,10 +70,12 @@
                       
                     </p>
                     @endif
-                </div>
+                    </div>
                 </div>
             @endforeach
+        </div>
         </div>
           
     </main>
 @endsection
+
